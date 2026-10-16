@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Astralis</title>
+    <link rel="icon" type="image/png" href="favicon.png">
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700&display=swap" rel="stylesheet">
+    <style>
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+
+      body {
+        background: #0d0118;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        height: 100vh;
+        font-family: 'Cinzel', serif;
+        overflow: hidden;
+      }
+
+      canvas {
+        position: fixed;
+        top: 0; left: 0;
+        width: 100%; height: 100%;
+        z-index: 0;
+        pointer-events: none;
+      }
+
+      .splash-content {
+        position: relative;
+        z-index: 1;
+        display: flex;
+        align-items: center;
+        gap: 32px;
+        padding-left: 140px;
+      }
+
+      /* Logo qui traverse l'écran */
+      .splash-logo {
+        width: 300px;
+        height: 300px;
+        object-fit: contain;
+        mix-blend-mode: lighten;
+        position: fixed;
+        top: 48%;
+        transform: translateY(-50%) translateY(35px);
+        z-index: 10;
+        animation: lancer 1.7s cubic-bezier(.2,0,.4,1) forwards;
+      }
+
+      @keyframes lancer {
+        0%   { left: 105%; rotate: 100deg; }
+        90%  { rotate: -350deg; }
+        100% { left: 20%;   rotate: -360deg; }
+      }
+
+      h1 {
+        font-size: 90px;
+        font-weight: 700;
+        letter-spacing: 0.2em;
+        line-height: 1;
+        display: flex;
+        margin-left: -70px
+      }
+
+      h1 span {
+        background-image: linear-gradient(60deg, #c9ae63, #b69c54);
+        background-clip: text;
+        -webkit-background-clip: text;
+        color: transparent;
+        opacity: 0;
+        animation: lettre 0.4s ease forwards;
+      }
+
+      h1 span:nth-child(8) { animation-delay: 0.85s; }
+      h1 span:nth-child(7) { animation-delay: 0.95s; }
+      h1 span:nth-child(6) { animation-delay: 1.15s; }
+      h1 span:nth-child(5) { animation-delay: 1.25s; }
+      h1 span:nth-child(4) { animation-delay: 1.35s; }
+      h1 span:nth-child(3) { animation-delay: 1.45s; }
+      h1 span:nth-child(2) { animation-delay: 1.55s; }
+      h1 span:nth-child(1) { animation-delay: 1.65s; }
+
+      @keyframes lettre {
+  from { opacity: 0; transform: translateX(30px); }
+  to   { opacity: 1; transform: translateX(0); }
+}
+
+      body.disparition {
+        animation: disparition 0.8s ease forwards;
+      }
+
+      @keyframes disparition {
+        from { opacity: 1; }
+        to   { opacity: 0; }
+      }
+
+      
+
+      /* Fondu disparition */
+      body.disparition {
+        animation: disparition 0.8s ease forwards;
+      }
+
+      @keyframes disparition {
+        from { opacity: 1; }
+        to   { opacity: 0; }
+      }
+    </style>
+  </head>
+  <body>
+    <canvas id="stars"></canvas>
+
+    <div class="splash-content">
+      <img class="splash-logo" src="logode.png" alt="Logo Astralis">
+      <h1>
+        <span>A</span><span>S</span><span>T</span><span>R</span><span>A</span><span>L</span><span>I</span><span>S</span>
+      </h1>
+    </div>
+
+    <script>
+      const canvas = document.getElementById('stars');
+      const ctx = canvas.getContext('2d');
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+
+      const nebulae = [
+        { x: 0.2,  y: 0.3,  r: 300, color: '120, 40, 200' },
+        { x: 0.75, y: 0.6,  r: 250, color: '80, 20, 180'  },
+        { x: 0.5,  y: 0.1,  r: 200, color: '150, 60, 220' },
+      ];
+
+      const stars = Array.from({ length: 250 }, () => ({
+        x: Math.random() * canvas.width,
+        y: Math.random() * canvas.height,
+        r: Math.random() * 1.4 + 0.3,
+        opacity: Math.random(),
+        dir: Math.random() > 0.5 ? 1 : -1,
+        speed: Math.random() * 0.012 + 0.003
+      }));
+
+      function draw() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+        for (let n of nebulae) {
+          const g = ctx.createRadialGradient(
+            n.x * canvas.width, n.y * canvas.height, 0,
+            n.x * canvas.width, n.y * canvas.height, n.r
+          );
+          g.addColorStop(0,   `rgba(${n.color}, 0.25)`);
+          g.addColorStop(0.5, `rgba(${n.color}, 0.08)`);
+          g.addColorStop(1,   `rgba(${n.color}, 0)`);
+          ctx.beginPath();
+          ctx.arc(n.x * canvas.width, n.y * canvas.height, n.r, 0, Math.PI * 2);
+          ctx.fillStyle = g;
+          ctx.fill();
+        }
+
+        for (let s of stars) {
+          s.opacity += s.speed * s.dir;
+          if (s.opacity >= 1)   { s.opacity = 1;   s.dir = -1; }
+          if (s.opacity <= 0.1) { s.opacity = 0.1; s.dir =  1; }
+          ctx.beginPath();
+          ctx.arc(s.x, s.y, s.r, 0, Math.PI * 2);
+          ctx.fillStyle = `rgba(220, 200, 255, ${s.opacity})`;
+          ctx.fill();
+        }
+
+        requestAnimationFrame(draw);
+      }
+      draw();
+
+      setTimeout(() => {
+        document.body.classList.add('disparition');
+        setTimeout(() => {
+          window.location.href = 'accueil.html';
+        }, 800);
+      }, 2500);
+    </script>
+  </body>
+</html>

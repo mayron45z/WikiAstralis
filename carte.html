@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Astralis - Wiki Officiel</title>
+    <link rel="icon" type="image/png" href="favicon.png">
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700&family=Crimson+Text:ital@1&display=swap" rel="stylesheet">
+    <style>
+      * { margin: 10; padding: 10; box-sizing: border-box; }
+
+
+.sidebar {
+  z-index: 200;
+}
+
+nav {
+  position: relative;
+  z-index: 300;
+}
+
+.carte-wrapper {
+  position: fixed;
+  top: 0; left: 0;
+  z-index: 1;
+}
+
+/* ── ÎLES ── */
+.ile {
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  cursor: pointer;
+  transition: transform 0.35s cubic-bezier(.34,1.56,.64,1), filter 0.35s ease;
+  filter: drop-shadow(0 0 0px rgba(201,168,76,0));
+  user-select: none;
+  text-decoration: none;
+  color: inherit;
+}
+.ile:visited,
+.ile:hover,
+.ile:active {
+  text-decoration: none;
+}
+.ile:visited .ile-label {
+  color: #ffffff;
+}
+.ile:hover {
+  transform: translateY(-18px) scale(1.04);
+  filter: drop-shadow(0 0 10px var(--ile-color, rgba(38, 137, 194, 0.6)));
+}
+
+.ile img {
+  width: 350px;
+  pointer-events: none;
+  animation: float 6s ease-in-out infinite;
+}
+.ile:nth-child(1) img { animation-delay: 0s; }
+.ile:nth-child(2) img { animation-delay: 1.5s; }
+.ile:nth-child(3) img { animation-delay: 3s; }
+.ile:nth-child(4) img { animation-delay: 0.8s; }
+.ile:nth-child(5) img { animation-delay: 2.2s; }
+
+@keyframes float {
+  0%, 100% { transform: translateY(0px); }
+  50%       { transform: translateY(-14px); }
+}
+
+.ile-label {
+  font-family: 'Cinzel', serif;
+  font-size: 1rem;
+  letter-spacing: 0.25em;
+  color: #ffffff;
+  text-transform: uppercase;
+  margin-top: -70px;
+  text-shadow: 0 0 10px var(--ile-color, rgb(38, 137, 194, 0.9));
+  opacity: 0;
+  transform: translateY(6px);
+  transition: opacity 0.3s ease, transform 0.3s ease;
+  white-space: nowrap;
+}
+.ile:hover .ile-label {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+
+/* ── MINIMAP ── */
+.minimap {
+  position: fixed;
+  bottom: 28px;
+  right: 28px;
+  z-index: 20;
+  width: 160px;
+  height: 28px;
+  background: rgba(10,5,25,0.6);
+  border: 1px solid rgba(201,168,76,0.25);
+  border-radius: 20px;
+  overflow: hidden;
+}
+.minimap-cursor {
+  position: absolute;
+  top: 4px;
+  left: 4px;
+  height: calc(100% - 8px);
+  width: 28px;
+  background: rgba(201,168,76,0.4);
+  border-radius: 12px;
+  transition: left 0.08s linear;
+}
+
+    </style>
+  </head>
+
+  <body>
+  <canvas id="stars"></canvas>
+
+    <div class="header">
+      <div class="wiki-label">Wiki Officiel</div>
+      <h1>ASTRALIS</h1>
+      <h3>Sous les étoiles, rien n'est jamais ce qu'il paraît.</h6>
+      <div class="divider">
+        <div class="divider-line"></div>
+        <div class="divider-diamond">✦</div>
+        <div class="divider-line"></div>
+      </div>
+    </div>
+    
+  <nav>
+  <div class="sidebar">
+    <div class="sidebar-logo">
+    <img class="logo-icon" src="logode.png" alt="Logo Astralis">
+    <span class="logo-text">ASTRALIS</span>
+  </div>
+    <ul>
+      <li>
+        <a href="accueil.html">
+          <span class="sidebar-icon">✨</span>
+          <span>Accueil</span>
+        </a>
+      </li>
+      <li>
+        <a href="lore.html">
+          <span class="sidebar-icon">📜</span>
+          <span>Lore</span>
+        </a>
+      </li>
+      <li class="active">
+        <a href="carte.html">
+          <span class="sidebar-icon">🧭</span>
+          <span>Carte</span>
+        </a>
+      </li>
+      <li>
+        <a href="personnages.html">
+          <span class="sidebar-icon">⚔️</span>
+          <span>Héros</span>
+        </a>
+      </li>
+      <li>
+        <a href="bestiaire.html">
+          <span class="sidebar-icon">🐺</span>
+          <span>Bestiaire</span>
+        </a>
+      </li>
+    </ul>
+  </div>
+  </nav>
+
+    <div class="carte-wrapper">
+      <div class="carte-world" id="carteWorld">
+
+        <a class="ile" href="nerelys.html" style="left: 500px; top: 300px; --ile-color: #4a9ebb;">
+          <img src="nerelysface.png" alt="Île 1">
+          <span class="ile-label">Nérélys</span>
+        </a>
+
+        
+
+      </div>
+    </div>
+
+    <div class="minimap">
+      <div class="minimap-cursor" id="minimapCursor"></div>
+    </div>
+
+     <script>
+      const world = document.getElementById('carteWorld');
+      const minimapCursor = document.getElementById('minimapCursor');
+      const WORLD_WIDTH = 4000;
+      let offsetX = 0;
+
+      function getMaxOffset() {
+        return -(WORLD_WIDTH - window.innerWidth);
+      }
+
+      function clamp(val, min, max) {
+        return Math.min(Math.max(val, min), max);
+      }
+
+      function applyOffset() {
+        world.style.transform = `translateX(${offsetX}px)`;
+        const ratio = offsetX / getMaxOffset();
+        const maxLeft = 160 - 28 - 8;
+        minimapCursor.style.left = (4 + ratio * maxLeft) + 'px';
+      }
+
+      // Molette → horizontal
+      window.addEventListener('wheel', (e) => {
+        e.preventDefault();
+        offsetX = clamp(offsetX - e.deltaY * 1.5, getMaxOffset(), 0);
+        applyOffset();
+      }, { passive: false });
+
+      // Drag souris
+      let isDragging = false;
+      let dragStartX = 0;
+      let offsetAtDrag = 0;
+
+      window.addEventListener('mousedown', (e) => {
+        isDragging = true;
+        dragStartX = e.clientX;
+        offsetAtDrag = offsetX;
+        document.body.style.cursor = 'grabbing';
+      });
+      window.addEventListener('mousemove', (e) => {
+        if (!isDragging) return;
+        offsetX = clamp(offsetAtDrag + (e.clientX - dragStartX), getMaxOffset(), 0);
+        applyOffset();
+      });
+      window.addEventListener('mouseup', () => {
+        isDragging = false;
+        document.body.style.cursor = '';
+      });
+
+      applyOffset();
+     </script>
+
+     <script src="script.js"></script>
+  </body>
+</html>

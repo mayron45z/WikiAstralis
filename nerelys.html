@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Astralis - Wiki Officiel</title>
+    <link rel="icon" type="image/png" href="favicon.png">
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700&family=Crimson+Text:ital@1&display=swap" rel="stylesheet">
+    <style>
+      html, body {
+        height: 100%;
+      }
+
+      body.nerelys-lock {
+        overflow: hidden;
+      }
+
+      .nerelys-page {
+        position: relative;
+        z-index: 2;
+        margin-left: 110px;
+        min-height: 100vh;
+        display: grid;
+        grid-template-columns: 1.6fr 1fr;
+        gap: 28px;
+        align-items: center;
+        padding: 32px;
+      }
+
+      .nerelys-image {
+        width: 70%;
+        height: calc(80vh - 90px);
+        object-fit: cover;
+        border-radius: 14px;
+        border: 3px solid rgba(219, 193, 121, 0.685);
+        margin-top: -200px;
+        margin-left: 100px
+      }
+      
+      .nerelys-map {
+        position: relative;
+      }
+
+      .map-spot {
+        position: absolute;
+        width: 60px;
+        height: 60px;
+        cursor: pointer;
+        border: none;
+        padding: 0;
+        margin: 0;
+        background: transparent;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: transform 0.2s ease;
+      }
+
+      .map-spot:hover,
+      .map-spot.active {
+        transform: scale(1.12);
+      }
+
+      .map-spot:focus-visible {
+        outline: 2px solid rgba(201, 168, 76, 0.85);
+        outline-offset: 4px;
+      }
+
+      .spot-star-icon {
+        font-size: 2.6rem;
+        line-height: 1;
+        color: #e7dcb7;
+        text-shadow:
+          0 0 10px rgba(211, 185, 114, 0.95),
+          0 0 22px rgb(1, 132, 255);
+        filter: drop-shadow(0 0 4px rgba(48, 133, 243, 0.733));
+        transition: color 0.2s ease, filter 0.2s ease;
+        pointer-events: none;
+      }
+
+      .map-spot:hover .spot-star-icon,
+      .map-spot.active .spot-star-icon {
+        color: #fffffd;
+        filter: drop-shadow(0 0 10px rgb(48, 133, 243, 0.733));
+      }
+
+      .spot-arene {
+        left: 150px;
+        top: 230px;
+      }
+
+      .spot-corallium {
+        left: 530px;
+        bottom: 50px;
+      }
+
+      .spot-vortex {
+        left: 270px;
+        bottom: 20px;
+      }
+
+      .spot-oceanide {
+        left: 465px;
+        top: 165px;
+      }
+
+      .spot-nerepolis {
+        left: 700px;
+        top: 100px;
+      }
+
+      .spot-combattants {
+        left: 485px;
+        top: -55px;
+      }
+
+      .spot-abysses {
+        left: 275px;
+        top: -85px;
+      }
+
+      
+
+      .nerelys-panel {
+        background: rgba(10, 5, 25, 0.72);
+        border: 2px solid rgba(199, 171, 94, 0.705);
+        border-radius: 14px;
+        padding: 40px;
+        margin-top: -355px;
+        margin-left: -150px
+      }
+
+      .nerelys-title {
+        margin: 15px 0 0 0;
+        font-family: 'Cinzel', serif;
+        font-size: 2.4rem;
+        color: #cec095;
+        text-align: center;
+      }
+
+      .nerelys-text {
+        margin: 50px 0 0 0;
+        font-family: 'Crimson Text', serif;
+        font-size: 1.25rem;
+        line-height: 1.8;
+        color: #ece6d3;
+      }
+    </style>
+  </head>
+  
+  <body class="nerelys-lock">
+  <canvas id="stars"></canvas>
+
+  <nav>
+  <div class="sidebar">
+    <div class="sidebar-logo">
+    <img class="logo-icon" src="logode.png" alt="Logo Astralis">
+    <span class="logo-text">ASTRALIS</span>
+  </div>
+    <ul>
+      <li>
+        <a href="accueil.html">
+          <span class="sidebar-icon">✨</span>
+          <span>Accueil</span>
+        </a>
+      </li>
+      <li>
+        <a href="lore.html">
+          <span class="sidebar-icon">📜</span>
+          <span>Lore</span>
+        </a>
+      </li>
+      <li class="active">
+        <a href="carte.html">
+          <span class="sidebar-icon">🧭</span>
+          <span>Carte</span>
+        </a>
+      </li>
+      <li>
+        <a href="personnages.html">
+          <span class="sidebar-icon">⚔️</span>
+          <span>Héros</span>
+        </a>
+      </li>
+      <li>
+        <a href="bestiaire.html">
+          <span class="sidebar-icon">🐺</span>
+          <span>Bestiaire</span>
+        </a>
+      </li>
+    </ul>
+  </div>
+  </nav>
+
+    <main class="nerelys-page">
+      <div class="nerelys-map">
+        <img class="nerelys-image" src="nerelys.png" alt="Ile de Nerelys">
+        <button type="button" class="map-spot spot-abysses" id="spotAbysses" aria-label="Les Abysses">
+          <span class="spot-star-icon spot-star-icon--abysses" aria-hidden="true">✶</span>
+        </button>
+        <button type="button" class="map-spot spot-combattants" id="spotCombattants" aria-label="L'île des combattants">
+          <span class="spot-star-icon spot-star-icon--combattants" aria-hidden="true">★</span>
+        </button>
+        <button type="button" class="map-spot spot-nerepolis" id="spotNerepolis" aria-label="Nérépolis">
+          <span class="spot-star-icon spot-star-icon--nerepolis" aria-hidden="true">✦</span>
+        </button>
+        <button type="button" class="map-spot spot-arene" id="spotArene" aria-label="L'arène">
+          <span class="spot-star-icon" aria-hidden="true">✦</span>
+        </button>
+        <button type="button" class="map-spot spot-corallium" id="spotCorallium" aria-label="Corallium">
+          <span class="spot-star-icon" aria-hidden="true">★</span>
+        </button>
+        <button type="button" class="map-spot spot-vortex" id="spotVortex" aria-label="Le Vortex">
+          <span class="spot-star-icon spot-star-icon--vortex" aria-hidden="true">✶</span>
+        </button>
+        <button type="button" class="map-spot spot-oceanide" id="spotOceanide" aria-label="Océanide">
+          <span class="spot-star-icon spot-star-icon--oceanide" aria-hidden="true">✴ </span>
+        </button>
+      </div>
+
+      <section class="nerelys-panel">
+        <h1 class="nerelys-title" id="locationTitle">Nérélys</h1>
+        <p class="nerelys-text" id="locationText1">
+            Nérélys est une île d'eau, connue pour ses eaux pures à perte de vue et pour sa lumière bleutée qui ne s'éteint jamais totalement. 
+            Il paraît qu'on peut parfois entendre Hydrior au loin, sa voix portée par les vagues.
+        </p>
+        <p class="nerelys-text" id="locationText2">
+            Un continent archipel dominé par l'eau : lagunes peu profondes, mers abyssales, atolls et îles de toutes tailles. 
+            La vie se déroule à la surface et sous la surface : villages flottants, cités immergés, forêts de coraux. Les voyages se font presque exclusivement par voie maritime, souvent en coopération avec animaux marins 
+            Les déplacements se font presque exclusivement par voie maritime, souvent en coopération avec animaux marins (tortues géantes, dauphins, raies,... )
+
+        </p>
+      </section>
+    </main>
+
+    <script>
+      const locationTitle = document.getElementById('locationTitle');
+      const locationText1 = document.getElementById('locationText1');
+      const locationText2 = document.getElementById('locationText2');
+      const mapSpots = document.querySelectorAll('.nerelys-map .map-spot');
+
+      function selectSpot(btn) {
+        mapSpots.forEach((b) => b.classList.remove('active'));
+        btn.classList.add('active');
+      }
+
+      const spotArene = document.getElementById('spotArene');
+      const spotCorallium = document.getElementById('spotCorallium');
+      const spotVortex = document.getElementById('spotVortex');
+      const spotOceanide = document.getElementById('spotOceanide');
+      const spotNerepolis = document.getElementById('spotNerepolis');
+      const spotCombattants = document.getElementById('spotCombattants');
+      const spotAbysses = document.getElementById('spotAbysses');
+
+      spotAbysses.addEventListener('click', () => {
+        selectSpot(spotAbysses);
+        locationTitle.textContent = 'Les Abysses';
+        locationText1.textContent = "Les Abysses sont une prison creusée dans les profondeurs de Nérélys, là où la pression écrase la lumière et où le silence pèse plus lourd que les chaînes. On y enferme les pires criminels, ceux dont les crimes ont brisé la loi des marées.";
+        locationText2.textContent = "Ses couloirs de basalte et de vitre noire descendent jusqu'à une fosse scellée : le cachot du Ner'Ghal, réservé à l'être que même les gardiens n'osent nommer qu'à voix basse.";
+      });
+
+      spotCombattants.addEventListener('click', () => {
+        selectSpot(spotCombattants);
+        locationTitle.textContent = "L'île des combattants";
+        locationText1.textContent = "L'île des combattants est une île secrète, forgée lors de la Fracture par trois champions dont les noms ne figurent sur aucune carte officielle. On y accède par routes maritimes dérobées ou signaux connus seulement de la Ligue.";
+        locationText2.textContent = "Aujourd'hui, elle sert de camp d'entraînement : arènes immergées, parcours de courants et salles de duel sous le vent y préparent les combattants aux épreuves du grand tournoi. Seuls les initiés savent la repérer à l'horizon.";
+      });
+
+      spotNerepolis.addEventListener('click', () => {
+        selectSpot(spotNerepolis);
+        locationTitle.textContent = 'Nérépolis';
+        locationText1.textContent = "Nérépolis occupe le quartier nord-ouest de l'île : une cité dense où les toits d'ardoise bleutée et les canaux se croisent en un damier vivant.";
+        locationText2.textContent = "La ville est partagée en quatre quartiers — marché, artisanat, savoir et docks — reliés par des passerelles et des places communes. Chaque secteur garde ses lois coutumières, mais tous se retrouvent au carrefour central lors des fêtes des marées.";
+      });
+
+      spotArene.addEventListener('click', () => {
+        selectSpot(spotArene);
+        locationTitle.textContent = "L'arène";
+        locationText1.textContent = "L'arène est un bassin circulaire creusé dans la roche côtière, entouré de gradins de corail poli. On y organise des joutes nautiques et des duels rituellement arbitrés par les anciens marins.";
+        locationText2.textContent = "Les spectateurs assistent depuis les balcons suspendus au-dessus des vagues ; le vainqueur reçoit une branche de nacre et le droit de sonner la cloche des marées jusqu'au prochain solstice.";
+      });
+
+      spotCorallium.addEventListener('click', () => {
+        selectSpot(spotCorallium);
+        locationTitle.textContent = 'Corallium';
+        locationText1.textContent = "Corallium est une cité portuaire bâtie sur des récifs vivants, au sud-ouest de Nérélys. Ses pontons de pierre et de corail relient marchés, docks et sanctuaires marins.";
+        locationText2.textContent = "Le lieu est réputé pour ses artisans des marées, ses convois maritimes et ses alliances avec les dauphins éclaireurs. Au crépuscule, les eaux autour de Corallium brillent d'un éclat turquoise.";
+      });
+
+      spotVortex.addEventListener('click', () => {
+        selectSpot(spotVortex);
+        locationTitle.textContent = 'Le Vortex';
+        locationText1.textContent = "Le Vortex est un palais de justice immergé sous la grande mer de Nérélys : une coupole de verre et de nacre abrite les tribunaux, où les juges arbitrés par les courants rendent leurs sentences.";
+        locationText2.textContent = "Les archives reposent dans des salles pressurisées, gardées par des sceaux de bioluminescence. Les plaideurs y descendent par ascenseurs à bulles ; au-dessus, le tourbillon de surface ne laisse deviner qu'une ombre lumineuse.";
+      });
+
+      spotOceanide.addEventListener('click', () => {
+        selectSpot(spotOceanide);
+        locationTitle.textContent = 'Océanide';
+        locationText1.textContent = "Océanide est la capitale de Nérélys : au centre s'élève un immense dôme de cristal et d'or liquide, cœur du pouvoir et symbole de la couronne des marées.";
+        locationText2.textContent = "La ville est entièrement submergée : palais, jardins suspendus et avenues lumineuses s'étendent sous l'eau, réservés aux plus fortunés. Les visiteurs admis découvrent une métropole où l'opulence se mesure aux bulles d'air privées et aux vues sur les abysses.";
+      });
+    </script>
+
+    <script src="script.js"></script>
+  </body>
+</html>
