@@ -242,17 +242,17 @@ h3 {
 }
 
 /* Couleurs par type */
-.actu-type.chapitre   { background: #1a2a4a; color: #4a9ebb; border-color: #4a9ebb; }
-.actu-type.personnage { background: #424018; color: #c2a731; border-color: #c2a731; }
-.actu-type.bestiaire  { background: #2a1010; color: #cf3429; border-color: #cf3429; }
-.actu-type.carte      { background: #1c2c1c; color: #4aaa6a; border-color: #4aaa6a; }
-.actu-type.divinite   { background: #3b243b; color: #d961e4; border-color: #d961e4; }
+.actu-type.chapitre   { background: #1a2a4a; color: #4986e0; border-color: #5f92df; }
+.actu-type.personnage { background: #424018; color: #ddc03e; border-color: #caa839; }
+.actu-type.bestiaire  { background: #2a1010; color: #e9493e; border-color: #c7271b; }
+.actu-type.carte      { background: #1c2c1c; color: #38bd33; border-color: #4aaa6a; }
+.actu-type.divinite   { background: #342741; color: #a281d6; border-color: #704fbe; }
 
-.actu-item:has(.actu-type.chapitre)   { border-left-color: #4a9ebb; }
+.actu-item:has(.actu-type.chapitre)   { border-left-color: #3a73b4; }
 .actu-item:has(.actu-type.personnage) { border-left-color: #c2a731; }
 .actu-item:has(.actu-type.bestiaire)  { border-left-color: #cf3429; }
 .actu-item:has(.actu-type.carte)      { border-left-color: #4aaa6a; }
-.actu-item:has(.actu-type.divinite)   { border-left-color: #d961e4; }
+.actu-item:has(.actu-type.divinite)   { border-left-color: #5c2a96; }
 
 /* Néon hover de la couleur du type */
 .actu-item:has(.actu-type.chapitre):hover {
@@ -298,10 +298,10 @@ h3 {
   margin-left: auto;
 }
 
-.actu-statut.termine  { color: #4aaa6a; border-color: #4aaa6a; background-color: #4aaa6a2a; }
-.actu-statut.nouveau  { color: #c0a046; border-color: #c0a046; background-color: #c0a04621; }
-.actu-statut.maj      { color: #4a9ebb; border-color: #4a9ebb; background-color: #4a9fbb23;}
-.actu-statut.preparation { color: #c91e1e; border-color: #c91e1e; background-color: #bb4a4a23;}
+.actu-statut.termine  { color: #7ad498; border-color: #6baa80; background-color: #4aaa6a2a; }
+.actu-statut.maj  { color: #cc906e; border-color: #bb6b29; background-color: #ce844721; }
+.actu-statut.nouveau      { color: #79ddd5; border-color: #359fc2; background-color: #68b8d323;}
+.actu-statut.preparation { color: #d188cb; border-color: #c258c2; background-color: #bb4a4a23;}
 
 .fil-actu a {
   text-decoration: none;
@@ -419,7 +419,7 @@ h3 {
 
 .spoil-message p {
   font-family: 'Cinzel', serif;
-  font-size: 1,5rem;
+  font-size: 1.5rem;
   color: #e8d8a0;
   line-height: 2;
   letter-spacing: 0.06em;
@@ -559,5 +559,248 @@ h3 {
   color: #1a0f2e;
   background: #c9a84c;
   box-shadow: 0 0 14px rgba(201, 168, 76, 0.4);
+}
+
+/* Version téléphone */
+@media (max-width: 768px) {
+
+  body {
+    align-items: stretch;
+    padding-top: 30px;
+    padding-left: 64px;      
+  }
+
+  .sidebar,
+  .sidebar:hover {
+    top: auto;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 76px;
+    flex-direction: row;
+    padding: 0;
+    gap: 0;
+    border-right: none;
+    border-top: 2px solid rgba(201, 168, 76, 0.603);
+    transition: none;
+  }
+
+  .sidebar-logo {
+    display: none;
+  }
+
+  .sidebar ul {
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .sidebar ul li {
+    flex: 1;
+    height: 76px;
+    padding: 0;
+    gap: 0;
+    justify-content: center;
+    font-size: 10px;
+    letter-spacing: 0.5px;
+  }
+
+  .sidebar ul li a {
+    flex-direction: column;   
+    justify-content: center;
+    align-items: center;
+    gap: 4px;
+    width: 100%;
+    height: 100%;
+  }
+
+  .sidebar-icon {
+    font-size: 26px;
+    min-width: 0;
+    line-height: 1;
+  }
+
+  body {
+    padding-left: 0;
+    padding-bottom: 96px;
+  }
+  
+  /* En-tête */
+  .header {
+    margin-left: 0;
+    padding: 0 12px;
+  }
+  .wiki-label {
+    font-size: 11px;
+    letter-spacing: 4px;
+    margin-bottom: 20px;
+  }
+  h1 {
+    font-size: clamp(34px, 11vw, 64px);
+  }
+  h3 {
+    font-size: 14px;
+    margin: 14px 0;
+  }
+  .divider { margin-top: 0; gap: 8px; }
+  .divider-line { width: 50px; }
+  .divider-diamond { font-size: 30px; }
+
+  /* Fil d'actualité */
+  .fil-actu {
+    margin: 30px 0;
+    margin-left: 0;
+    padding: 0 12px;
+    max-width: none;
+  }
+  .section-titre {
+    font-size: 10px;
+    letter-spacing: 3px;
+  }
+  .fil-actu a {
+    display: block;
+  }
+    .actu-item {
+    width: auto;
+    height: auto;
+    display: grid;
+    grid-template-columns: 80px 1fr;  
+    align-items: center;
+    gap: 8px 10px;
+    padding: 10px;
+  }
+  .actu-type {
+    grid-column: 1;
+    grid-row: 1;
+    min-width: 0;
+    width: 100%;                        
+    box-sizing: border-box;
+    font-size: 11px;
+    padding: 3px 0;
+    white-space: nowrap;
+    text-align: center;
+    align-self: center;
+  }
+  .actu-nom {
+    grid-column: 2;
+    grid-row: 1;
+    align-self: center;     
+    justify-self: start;   
+    text-align: left;
+    margin: 4px;
+    font-size: 18px;
+    margin-bottom: -25px;
+  }
+  .actu-statut {
+    grid-column: 1 / -1;  
+    grid-row: 2;
+    justify-self: start;
+    margin-left: 0px;
+    font-size: 10px;
+    letter-spacing: 1px;
+    padding: 3px 6px;
+    white-space: nowrap;
+  }
+
+    /* ===== Page Lore ===== */
+  .arcs-section {
+    margin-left: 0;
+    padding: 20px 0;
+    width: 100%;
+  }
+  .arcs-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+    width: 100%;
+    padding: 0 16px;
+    box-sizing: border-box;
+  }
+  .arc-card {
+    padding: 18px 10px;
+  }
+
+  /* Zone de spoil */
+  .spoil-zone {
+    margin: 120px 16px 0;
+    max-width: none;
+    min-height: 0px;
+  }
+  .spoil-nuage {
+    inset: 80px -80px;
+    overflow: hidden;
+  }
+    .nuage-img {
+    width: 110%;
+    height: 110%;
+    margin-left: 43px;
+    margin-top: -50px;
+    object-fit: cover;
+  }
+  .spoil-texte-zone {
+    padding: 40px 20px;
+    margin-top: -110px;
+    gap: 20px;
+  }
+  .spoil-message p {
+    font-size: 0.90rem;
+    line-height: 1.7;
+    margin-bottom: 30px;
+  }
+  .spoil-content p {
+    font-size: 1.05rem;
+    line-height: 1.8;
+  }
+
+  /* ===== Page Chapitre ===== */
+  .chapitre-wrapper {
+    margin-left: 0;
+    margin-top: 20px;
+    padding: 10px 12px 40px;
+    max-width: 100%;
+    box-sizing: border-box;
+    min-height: auto;
+  }
+  .chapitre-header {
+    margin-bottom: 30px;
+  }
+  .chapitre-label {
+    font-size: 0.7rem;
+    letter-spacing: 0.2em;
+  }
+  .chapitre-title {
+    font-size: clamp(1.5rem, 7vw, 2rem);
+    line-height: 1.2;
+    margin-bottom: 16px;
+  }
+  .chapitre-content {
+    padding: 22px 16px;
+    border-radius: 18px;
+    margin-bottom: 40px;
+  }
+  .chapitre-content p {
+    font-size: 1.05rem;
+    line-height: 1.8;
+    margin-bottom: 20px;
+  }
+  .dialogue-block {
+    padding-left: 14px;
+    margin: 22px 0;
+  }
+  .dialogue-block p {
+    font-size: 1.05rem;
+    line-height: 1.8;
+  }
+  .chapitre-nav {
+    margin-top: 40px;
+    padding-top: 30px;
+    padding-bottom: 20px;
+  }
+  .chapitre-retour {
+    font-size: 0.75rem;
+    padding: 9px 20px;
+  }
 }
 

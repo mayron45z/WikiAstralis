@@ -29,6 +29,7 @@ function createStars() {
 
 function drawStars() {
   for (let star of stars) {
+    
     // Déplacement horizontal au lieu de vertical
     star.x += star.speed;
     if (star.x > canvas.width) {

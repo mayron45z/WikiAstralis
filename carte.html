@@ -5,6 +5,7 @@
     <link rel="icon" type="image/png" href="favicon.png">
     <link rel="stylesheet" href="style.css">
     <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700&family=Crimson+Text:ital@1&display=swap" rel="stylesheet">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <style>
       * { margin: 10; padding: 10; box-sizing: border-box; }
 
@@ -107,6 +108,25 @@ nav {
   background: rgba(201,168,76,0.4);
   border-radius: 12px;
   transition: left 0.08s linear;
+}
+@media (max-width: 768px) {
+  .carte-wrapper {
+    touch-action: none;  
+  }
+
+  .ile img {
+    width: 200px;      
+  }
+
+  .ile-label {
+    margin-top: -40px;
+    font-size: 0.8rem;
+  }
+
+  .minimap {
+    bottom: 100px;        
+    right: 16px;
+  }
 }
 
     </style>
@@ -233,6 +253,25 @@ nav {
         document.body.style.cursor = '';
       });
 
+      // Drag au doigt
+let touchStartX = 0;
+let offsetAtTouch = 0;
+
+window.addEventListener('touchstart', (e) => {
+  touchStartX = e.touches[0].clientX;
+  offsetAtTouch = offsetX;
+}, { passive: true });
+
+window.addEventListener('touchmove', (e) => {
+  offsetX = clamp(offsetAtTouch + (e.touches[0].clientX - touchStartX), getMaxOffset(), 0);
+  applyOffset();
+}, { passive: true });
+
+// Si on tourne le téléphone, on recalcule les limites
+window.addEventListener('resize', () => {
+  offsetX = clamp(offsetX, getMaxOffset(), 0);
+  applyOffset();
+});
       applyOffset();
      </script>
 
