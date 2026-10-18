@@ -721,6 +721,8 @@ h3 {
     margin-left: 0;
     padding: 20px 0;
     width: 100%;
+    position: relative;
+    z-index: 5;
   }
   .arcs-grid {
     grid-template-columns: repeat(2, 1fr);
@@ -731,6 +733,8 @@ h3 {
   }
   .arc-card {
     padding: 18px 10px;
+    position: relative;
+    z-index: 5;
   }
 
   /* Zone de spoil */
@@ -742,7 +746,8 @@ h3 {
   .spoil-nuage {
     inset: 10% 0;
     overflow: visible;
-    container-type: size;     
+    container-type: size;
+    pointer-events: none;      
   }
   .nuage-img {
     inset: auto;            
@@ -759,6 +764,11 @@ h3 {
     padding: 40px 20px;
     margin-top: -110px;
     gap: 20px;
+  }
+  .spoil-texte-zone,
+  .spoil-passer {
+  pointer-events: auto;
+}
   }
   .spoil-message p {
     font-size: 0.85rem;
