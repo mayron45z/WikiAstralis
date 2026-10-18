@@ -5,6 +5,7 @@
     <link rel="icon" type="image/png" href="favicon.png">
     <link rel="stylesheet" href="style.css">
     <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700&family=Crimson+Text:ital@1&display=swap" rel="stylesheet">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <style>
       html, body {
         height: 100%;
@@ -144,6 +145,64 @@
         line-height: 1.8;
         color: #ece6d3;
       }
+
+      @media (max-width: 768px) {
+
+  /* on autorise le défilement */
+  body.nerelys-lock { overflow: auto; }
+
+  /* une seule colonne : carte en haut, texte en dessous */
+  .nerelys-page {
+    display: block;
+    width: 100%;
+    box-sizing: border-box;
+    margin-left: 0;
+    min-height: auto;
+    padding: 16px 12px 110px;   /* 110px = place pour la barre du bas */
+  }
+
+  /* la carte prend toute la largeur */
+  .nerelys-map {
+    width: 100%;
+    margin-bottom: 20px;
+  }
+  .nerelys-image {
+    display: block;
+    width: 100%;
+    height: auto;
+    margin: 0;
+  }
+
+  /* étoiles plus petites, centrées sur leur point */
+  .map-spot {
+    width: 44px;
+    height: 44px;
+    margin: -22px 0 0 -22px;
+    bottom: auto;
+  }
+  .spot-star-icon { font-size: 1.8rem; }
+
+  /* positions en % de l'image */
+  .spot-arene      { left: 12%; top: 69%; }
+  .spot-corallium  { left: 71%; top: 88%; }
+  .spot-vortex     { left: 31%; top: 93%; }
+  .spot-oceanide   { left: 61%; top: 59%; }
+  .spot-nerepolis  { left: 94%; top: 49%; }
+  .spot-combattants{ left: 64%; top: 26%; }
+  .spot-abysses    { left: 32%; top: 22%; }
+
+  /* le panneau de texte */
+  .nerelys-panel {
+    margin: 0;
+    padding: 22px 18px;
+  }
+  .nerelys-title { font-size: 1.7rem; }
+  .nerelys-text {
+    margin-top: 20px;
+    font-size: 1.05rem;
+    line-height: 1.6;
+  }
+}
     </style>
   </head>
   
@@ -173,18 +232,6 @@
         <a href="carte.html">
           <span class="sidebar-icon">🧭</span>
           <span>Carte</span>
-        </a>
-      </li>
-      <li>
-        <a href="personnages.html">
-          <span class="sidebar-icon">⚔️</span>
-          <span>Héros</span>
-        </a>
-      </li>
-      <li>
-        <a href="bestiaire.html">
-          <span class="sidebar-icon">🐺</span>
-          <span>Bestiaire</span>
         </a>
       </li>
     </ul>
@@ -299,6 +346,16 @@
         locationText1.textContent = "Océanide est la capitale de Nérélys : au centre s'élève un immense dôme de cristal et d'or liquide, cœur du pouvoir et symbole de la couronne des marées.";
         locationText2.textContent = "La ville est entièrement submergée : palais, jardins suspendus et avenues lumineuses s'étendent sous l'eau, réservés aux plus fortunés. Les visiteurs admis découvrent une métropole où l'opulence se mesure aux bulles d'air privées et aux vues sur les abysses.";
       });
+
+    function selectSpot(btn) {
+  mapSpots.forEach((b) => b.classList.remove('active'));
+  btn.classList.add('active');
+
+  if (window.innerWidth <= 768) {
+    document.querySelector('.nerelys-panel')
+      .scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+}
     </script>
 
     <script src="script.js"></script>

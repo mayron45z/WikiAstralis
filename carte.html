@@ -115,7 +115,9 @@ nav {
   }
 
   .ile img {
-    width: 200px;      
+    width: 200px; 
+    margin-top: -130px;
+    margin-left: -700px;     
   }
 
   .ile-label {
@@ -171,18 +173,6 @@ nav {
           <span>Carte</span>
         </a>
       </li>
-      <li>
-        <a href="personnages.html">
-          <span class="sidebar-icon">⚔️</span>
-          <span>Héros</span>
-        </a>
-      </li>
-      <li>
-        <a href="bestiaire.html">
-          <span class="sidebar-icon">🐺</span>
-          <span>Bestiaire</span>
-        </a>
-      </li>
     </ul>
   </div>
   </nav>
@@ -190,7 +180,7 @@ nav {
     <div class="carte-wrapper">
       <div class="carte-world" id="carteWorld">
 
-        <a class="ile" href="nerelys.html" style="left: 500px; top: 300px; --ile-color: #4a9ebb;">
+        <a class="ile" href="" style="left: 500px; top: 300px; --ile-color: #4a9ebb;">
           <img src="nerelysface.png" alt="Île 1">
           <span class="ile-label">Nérélys</span>
         </a>
@@ -271,6 +261,13 @@ window.addEventListener('touchmove', (e) => {
 window.addEventListener('resize', () => {
   offsetX = clamp(offsetX, getMaxOffset(), 0);
   applyOffset();
+});
+
+// Clic sur une île → ouvre sa page
+document.querySelectorAll('.ile').forEach((ile) => {
+  ile.addEventListener('click', () => {
+    window.location.href = ile.getAttribute('href');
+  });
 });
       applyOffset();
      </script>

@@ -724,20 +724,25 @@ h3 {
 
   /* Zone de spoil */
   .spoil-zone {
-    margin: 120px 16px 0;
+    margin: 120px 4% 0;
     max-width: none;
-    min-height: 0px;
+    min-height: 0;
   }
   .spoil-nuage {
-    inset: 80px -80px;
-    overflow: hidden;
+    inset: 10% 0;
+    overflow: visible;
+    container-type: size;     
   }
-    .nuage-img {
-    width: 110%;
-    height: 110%;
-    margin-left: 43px;
-    margin-top: -50px;
-    object-fit: cover;
+  .nuage-img {
+    inset: auto;            
+    top: 50%;
+    left: 38%;
+    width: 350cqh;        
+    height: 180cqw;         
+    margin: 0;
+    object-fit: contain;
+    object-position: center;
+    transform: translate(-50%, -50%) rotate(90deg);
   }
   .spoil-texte-zone {
     padding: 40px 20px;
@@ -745,12 +750,13 @@ h3 {
     gap: 20px;
   }
   .spoil-message p {
-    font-size: 0.90rem;
+    font-size: 0.85rem;
     line-height: 1.7;
     margin-bottom: 30px;
+    margin-top: 20px;
   }
   .spoil-content p {
-    font-size: 1.05rem;
+    font-size: 1.10rem;
     line-height: 1.8;
   }
 
