@@ -1,3 +1,14 @@
+html {
+  background: #0a0513;          /* même couleur que ton body : plus de blanc derrière */
+  overflow-x: clip;
+  overscroll-behavior: none;
+}
+body {
+  overflow-x: clip;
+  max-width: 100%;
+  touch-action: pan-y;          /* seul le scroll vertical est autorisé au doigt */
+}
+
 /* Fondu entrée accueil */
 body {
   animation: fadeIn 1s ease forwards;
