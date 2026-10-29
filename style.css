@@ -334,16 +334,26 @@ h3 {
   gap: 20px;
 }
 
+.arc-link {
+  text-decoration: none;
+  color: inherit;
+  display: flex;          
+}
+
 .arc-card {
+  width: 100%;            
+  min-height: 120px;    
+  box-sizing: border-box;
   border: 1px solid #c9a84c;
   border-radius: 8px;
   padding: 24px 16px;
   display: flex;
   flex-direction: column;
   align-items: center;
+  justify-content: center; 
   gap: 10px;
   background: rgba(255, 255, 255, 0.04);
-  cursor:pointer ;
+  cursor: pointer;
   transition: background 0.3s, box-shadow 0.3s;
 }
 
@@ -365,11 +375,6 @@ h3 {
   text-align: center;
   letter-spacing: 0.05em;
   text-transform: uppercase;
-}
-
-.arc-link {
-  text-decoration: none;
-  color: inherit;
 }
 
 /*Spoil Warning */
@@ -542,6 +547,30 @@ h3 {
   font-size: 1.3rem;
   line-height: 2;
   color: #d6d6d6;
+  margin-bottom: 16px;
+}
+
+.dialogue-reve-block {
+  border-left: 2px solid #bbac78;
+  padding-left: 24px;
+  margin: 32px 0;
+}
+
+.dialogue-reve-block p {
+  font-family: 'Crimson Text', Georgia, serif;
+  font-size: 1.3rem;
+  line-height: 2;
+  color: #e99ccd;
+  font-style: italic;
+  margin-bottom: 16px;
+}
+
+.reve-block p {
+  font-family: 'Crimson Text', Georgia, serif;
+  font-size: 1.3rem;
+  line-height: 2;
+  color: #e99ccd;
+  font-style: italic;
   margin-bottom: 16px;
 }
 
@@ -781,53 +810,5 @@ h3 {
     line-height: 1.8;
   }
 
-  /* ===== Page Chapitre ===== */
-  .chapitre-wrapper {
-    margin-left: 0;
-    margin-top: 20px;
-    padding: 10px 12px 40px;
-    max-width: 100%;
-    box-sizing: border-box;
-    min-height: auto;
-  }
-  .chapitre-header {
-    margin-bottom: 30px;
-  }
-  .chapitre-label {
-    font-size: 0.7rem;
-    letter-spacing: 0.2em;
-  }
-  .chapitre-title {
-    font-size: clamp(1.5rem, 7vw, 2rem);
-    line-height: 1.2;
-    margin-bottom: 16px;
-  }
-  .chapitre-content {
-    padding: 22px 16px;
-    border-radius: 18px;
-    margin-bottom: 40px;
-  }
-  .chapitre-content p {
-    font-size: 1.05rem;
-    line-height: 1.8;
-    margin-bottom: 20px;
-  }
-  .dialogue-block {
-    padding-left: 14px;
-    margin: 22px 0;
-  }
-  .dialogue-block p {
-    font-size: 1.05rem;
-    line-height: 1.8;
-  }
-  .chapitre-nav {
-    margin-top: 40px;
-    padding-top: 30px;
-    padding-bottom: 20px;
-  }
-  .chapitre-retour {
-    font-size: 0.75rem;
-    padding: 9px 20px;
-  }
-}
+  
 
