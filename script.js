@@ -148,3 +148,137 @@ setInterval(createShootingStar, 4000);
 animate();
 
 
+(function () {
+  function nom(chemin) {
+    return chemin.split('?')[0].split('#')[0].split('/').pop().replace(/\.html$/, '');
+  }
+  function lire(cle) {
+    try { return JSON.parse(localStorage.getItem(cle)); } catch (e) { return null; }
+  }
+  function ecrire(cle, valeur) {
+    try { localStorage.setItem(cle, JSON.stringify(valeur)); return true; } catch (e) { return false; }
+  }
+  function effacer(cle) {
+    try { localStorage.removeItem(cle); } catch (e) {}
+  }
+
+  var cartes = document.querySelectorAll('.arc-link');
+  for (var c = 0; c < cartes.length; c++) {
+    var carte = cartes[c].querySelector('.arc-card');
+    if (carte && lire('marquepage:' + nom(cartes[c].getAttribute('href') || ''))) {
+      var pastille = document.createElement('span');
+      pastille.className = 'arc-marque';
+      pastille.textContent = '⭐';
+      carte.appendChild(pastille);
+    }
+  }
+
+  var contenu = document.querySelector('.chapitre-content');
+  if (!contenu) return;
+
+  var CLE = 'marquepage:' + nom(location.pathname);
+  var LIGNE = 140; /* distance depuis le haut de l'écran */
+  var blocs = Array.prototype.slice.call(contenu.querySelectorAll('p'));
+  contenu.style.position = 'relative';
+
+  /* Éléments */
+  var barre = document.createElement('div');
+  barre.className = 'marquepage-bar';
+
+  var boutonPoser = document.createElement('button');
+  boutonPoser.type = 'button';
+  boutonPoser.className = 'marquepage-btn';
+  boutonPoser.textContent = '⭐ Poser un repère de lecture';
+
+  var reprise = document.createElement('div');
+  reprise.className = 'marquepage-reprise';
+
+  var boutonReprendre = document.createElement('button');
+  boutonReprendre.type = 'button';
+  boutonReprendre.className = 'marquepage-btn';
+  boutonReprendre.textContent = '↩ Reprendre ma lecture';
+
+  var boutonEffacer = document.createElement('button');
+  boutonEffacer.type = 'button';
+  boutonEffacer.className = 'marquepage-btn marquepage-effacer';
+  boutonEffacer.title = 'Retirer le marque-page';
+  boutonEffacer.textContent = '✕';
+
+  reprise.appendChild(boutonReprendre);
+  reprise.appendChild(boutonEffacer);
+  barre.appendChild(reprise);
+  barre.appendChild(boutonPoser);
+  document.body.appendChild(barre);
+
+  var ruban = document.createElement('div');
+  ruban.className = 'marquepage-ruban';
+  ruban.textContent = '⭐';
+  contenu.appendChild(ruban);
+
+  var message = document.createElement('div');
+  message.className = 'marquepage-toast';
+  document.body.appendChild(message);
+  var minuteur;
+  function annoncer(texte) {
+    message.textContent = texte;
+    message.classList.add('visible');
+    clearTimeout(minuteur);
+    minuteur = setTimeout(function () { message.classList.remove('visible'); }, 2200);
+  }
+
+  function pointActuel() {
+    for (var i = 0; i < blocs.length; i++) {
+      var r = blocs[i].getBoundingClientRect();
+      if (r.bottom > LIGNE) {
+        var part = r.height ? Math.min(Math.max((LIGNE - r.top) / r.height, 0), 1) : 0;
+        return { i: i, r: part };
+      }
+    }
+    return { i: blocs.length - 1, r: 1 };
+  }
+
+  function positionY(point) {
+    var bloc = point && blocs[point.i];
+    if (!bloc) return null;
+    var r = bloc.getBoundingClientRect();
+    return r.top + window.pageYOffset + r.height * point.r;
+  }
+
+  function afficher() {
+    var y = positionY(lire(CLE));
+    if (y === null) {
+      ruban.style.display = 'none';
+      reprise.style.display = 'none';
+      return;
+    }
+    var haut = contenu.getBoundingClientRect().top + window.pageYOffset;
+    ruban.style.top = (y - haut) + 'px';
+    ruban.style.display = 'block';
+    reprise.style.display = 'flex';
+  }
+
+  boutonPoser.addEventListener('click', function () {
+    if (ecrire(CLE, pointActuel())) {
+      afficher();
+      annoncer('Marque-page posé ! ⭐');
+    } else {
+      annoncer("Impossible d'enregistrer ici (navigation privée ?)");
+    }
+  });
+
+  boutonReprendre.addEventListener('click', function () {
+    var y = positionY(lire(CLE));
+    if (y !== null) window.scrollTo({ top: Math.max(y - LIGNE, 0), behavior: 'smooth' });
+  });
+
+  boutonEffacer.addEventListener('click', function () {
+    effacer(CLE);
+    afficher();
+    annoncer('Marque-page retiré ! ⭐');
+  });
+
+  window.addEventListener('load', afficher);
+  window.addEventListener('resize', afficher);
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(afficher);
+  afficher();
+})();
