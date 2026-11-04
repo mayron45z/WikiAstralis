@@ -531,11 +531,6 @@ h3 {
   text-align: left;
 }
 
-.chapitre-content .italique {
-  font-style: italic;
-  color: #c8bfa0;
-}
-
 .dialogue-block {
   border-left: 2px solid #bbac78;
   padding-left: 24px;
@@ -572,6 +567,28 @@ h3 {
   color: #e99ccd;
   font-style: italic;
   margin-bottom: 16px;
+}
+
+.dialogue-conte-block p {
+  font-family: 'Crimson Text', Georgia, serif;
+  font-size: 1.3rem;
+  line-height: 2;
+  color: #9ccae9;
+  font-style: italic;
+  margin-bottom: 16px;
+}
+
+.conte-block p {
+  font-family: 'Crimson Text', Georgia, serif;
+  font-size: 1.3rem;
+  line-height: 2;
+  color: #9ccae9;
+  font-style: italic;
+  margin-bottom: 16px;
+}
+.conte {
+  font-style: italic;
+  color: #8fb4e3;
 }
 
 .chapitre-nav {
@@ -911,4 +928,4 @@ h3 {
     font-size: 1.10rem;
     line-height: 1.8;
   }
-
+}
