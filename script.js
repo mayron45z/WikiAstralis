@@ -147,8 +147,144 @@ createStars();
 setInterval(createShootingStar, 4000);
 animate();
 
+(function () {
+  var PISTES = [
+    { titre: 'Sous les Étoiles', fichier: 'piano.mp3' },
+    { titre: 'Lettre d\'Amour', fichier: 'jazzpiano.mp3' },
+    { titre: 'Red Night', fichier: 'slow.mp3' },
+    { titre: 'Nap in the Sun', fichier: 'harp.mp3' },
+    { titre: 'Beethoven', fichier: 'violin.mp3' }
+  ];
+
+  function lire(cle) {
+    try { return localStorage.getItem(cle); } catch (e) { return null; }
+  }
+  function ecrire(cle, valeur) {
+    try { localStorage.setItem(cle, valeur); } catch (e) {}
+  }
+
+  var barreLaterale = document.querySelector('.sidebar');
+  if (!barreLaterale) return;
+
+  /* ---------- État sauvegardé ---------- */
+  var index = parseInt(lire('musique:piste'), 10);
+  if (isNaN(index) || index < 0 || index >= PISTES.length) index = 0;
+
+  var volume = parseFloat(lire('musique:volume'));
+  if (isNaN(volume)) volume = 0.35;
+
+  /* La musique est active par défaut, sauf si le lecteur l'a mise en pause */
+  var actif = lire('musique:active') !== '0';
+  var premiereFois = true;
+  var relanceT = 0;
+
+  /* ---------- Lecteur audio ---------- */
+  var audio = new Audio();
+  audio.volume = volume;
+  audio.src = PISTES[index].fichier;
+
+  audio.addEventListener('loadedmetadata', function () {
+    if (!premiereFois) return;
+    premiereFois = false;
+    var t = parseFloat(lire('musique:temps'));
+    if (t && audio.duration && t < audio.duration) audio.currentTime = t;
+  });
+  audio.addEventListener('timeupdate', function () {
+    if (!audio.paused) ecrire('musique:temps', audio.currentTime);
+  });
+  window.addEventListener('pagehide', function () {
+    if (!audio.paused) ecrire('musique:temps', audio.currentTime);
+  });
+  audio.addEventListener('ended', function () { changer(index + 1, true); });
+
+  /* ---------- Le lecteur, rangé en bas de la barre latérale ---------- */
+  var panneau = document.createElement('div');
+  panneau.className = 'musique-panneau';
+  panneau.innerHTML =
+    '<div class="vinyle"><div class="vinyle-etiquette"></div></div>' +
+    '<p class="musique-titre"></p>' +
+    '<div class="musique-controles">' +
+      '<button type="button" class="m-btn m-prec" aria-label="Précédent">⏮</button>' +
+      '<button type="button" class="m-btn m-play" aria-label="Lecture ou pause">▶</button>' +
+      '<button type="button" class="m-btn m-suiv" aria-label="Suivant">⏭</button>' +
+    '</div>' +
+    '<input type="range" class="musique-volume" min="0" max="100" aria-label="Volume">';
+  barreLaterale.appendChild(panneau);
+
+  var vinyle = panneau.querySelector('.vinyle');
+  var titre = panneau.querySelector('.musique-titre');
+  var bPrec = panneau.querySelector('.m-prec');
+  var bPlay = panneau.querySelector('.m-play');
+  var bSuiv = panneau.querySelector('.m-suiv');
+  var barreVolume = panneau.querySelector('.musique-volume');
+
+  function majVolumeVisuel() {
+    barreVolume.style.setProperty('--v', barreVolume.value + '%');
+  }
+  barreVolume.value = Math.round(volume * 100);
+  majVolumeVisuel();
+
+  /* ---------- Fonctions ---------- */
+  function maj() {
+    var enCours = !audio.paused;
+    vinyle.classList.toggle('tourne', enCours);
+    bPlay.textContent = enCours ? '⏸' : '▶';
+    titre.textContent = PISTES[index].titre;
+  }
+
+  function jouer() {
+    var essai = audio.play();
+    if (essai && essai.catch) essai.catch(function () {});
+  }
+
+  function changer(nouvelIndex, lancer) {
+    index = (nouvelIndex + PISTES.length) % PISTES.length;
+    ecrire('musique:piste', index);
+    ecrire('musique:temps', 0);
+    audio.src = PISTES[index].fichier;
+    if (lancer) { actif = true; ecrire('musique:active', '1'); jouer(); }
+    maj();
+  }
+
+  audio.addEventListener('play', maj);
+  audio.addEventListener('pause', maj);
+
+  bPlay.addEventListener('click', function () {
+    if (Date.now() - relanceT < 500) return;
+    if (audio.paused) {
+      actif = true; ecrire('musique:active', '1'); jouer();
+    } else {
+      actif = false; ecrire('musique:active', '0'); audio.pause();
+    }
+  });
+  bPrec.addEventListener('click', function () { changer(index - 1, true); });
+  bSuiv.addEventListener('click', function () { changer(index + 1, true); });
+
+  barreVolume.addEventListener('input', function () {
+    audio.volume = barreVolume.value / 100;
+    ecrire('musique:volume', audio.volume);
+    majVolumeVisuel();
+  });
+
+  /* ---------- Lancement automatique ---------- */
+  if (actif) {
+    jouer(); /* marche si le navigateur l'autorise */
+
+    var evenements = ['pointerdown', 'keydown', 'touchend', 'click'];
+    var relance = function () {
+      if (!actif) return;
+      if (audio.paused) { relanceT = Date.now(); jouer(); }
+      evenements.forEach(function (ev) { document.removeEventListener(ev, relance); });
+    };
+    evenements.forEach(function (ev) { document.addEventListener(ev, relance); });
+  }
+
+  maj();
+})();
 
 (function () {
+
+  /* ---------- Utilitaires ---------- */
   function nom(chemin) {
     return chemin.split('?')[0].split('#')[0].split('/').pop().replace(/\.html$/, '');
   }
@@ -162,6 +298,7 @@ animate();
     try { localStorage.removeItem(cle); } catch (e) {}
   }
 
+  /* ---------- Pastille ⭐ sur les cartes de chapitres (page Lore) ---------- */
   var cartes = document.querySelectorAll('.arc-link');
   for (var c = 0; c < cartes.length; c++) {
     var carte = cartes[c].querySelector('.arc-card');
@@ -173,34 +310,37 @@ animate();
     }
   }
 
+  /* ---------- Page de chapitre uniquement ---------- */
   var contenu = document.querySelector('.chapitre-content');
   if (!contenu) return;
 
   var CLE = 'marquepage:' + nom(location.pathname);
-  var LIGNE = 140; /* distance depuis le haut de l'écran */
+  var LIGNE = 140; /* le texte repris s'affiche à cette distance du haut de l'écran */
+  var TEXTE_PLACER = 'Placer un repère de lecture';
   var blocs = Array.prototype.slice.call(contenu.querySelectorAll('p'));
+  var placement = false;
   contenu.style.position = 'relative';
 
-  /* Éléments */
+  /* ---------- Éléments ---------- */
   var barre = document.createElement('div');
   barre.className = 'marquepage-bar';
 
   var boutonPoser = document.createElement('button');
   boutonPoser.type = 'button';
   boutonPoser.className = 'marquepage-btn';
-  boutonPoser.textContent = '⭐ Poser un repère de lecture';
+  boutonPoser.textContent = TEXTE_PLACER;
 
   var reprise = document.createElement('div');
   reprise.className = 'marquepage-reprise';
 
   var boutonReprendre = document.createElement('button');
   boutonReprendre.type = 'button';
-  boutonReprendre.className = 'marquepage-btn';
-  boutonReprendre.textContent = '↩ Reprendre ma lecture';
+  boutonReprendre.className = 'reprendre-marquepage-btn reprendre-marquepage-btn:hover';
+  boutonReprendre.textContent = 'Reprendre ma lecture';
 
   var boutonEffacer = document.createElement('button');
   boutonEffacer.type = 'button';
-  boutonEffacer.className = 'marquepage-btn marquepage-effacer';
+  boutonEffacer.className = 'delete-marquepage-btn delete-marquepage-btn:hover';
   boutonEffacer.title = 'Retirer le marque-page';
   boutonEffacer.textContent = '✕';
 
@@ -210,6 +350,9 @@ animate();
   barre.appendChild(boutonPoser);
   document.body.appendChild(barre);
 
+  var retour = document.querySelector('.chapitre-retour');
+  if (retour) barre.insertBefore(retour, barre.firstChild);
+
   var ruban = document.createElement('div');
   ruban.className = 'marquepage-ruban';
   ruban.textContent = '⭐';
@@ -218,6 +361,7 @@ animate();
   var message = document.createElement('div');
   message.className = 'marquepage-toast';
   document.body.appendChild(message);
+
   var minuteur;
   function annoncer(texte) {
     message.textContent = texte;
@@ -226,17 +370,7 @@ animate();
     minuteur = setTimeout(function () { message.classList.remove('visible'); }, 2200);
   }
 
-  function pointActuel() {
-    for (var i = 0; i < blocs.length; i++) {
-      var r = blocs[i].getBoundingClientRect();
-      if (r.bottom > LIGNE) {
-        var part = r.height ? Math.min(Math.max((LIGNE - r.top) / r.height, 0), 1) : 0;
-        return { i: i, r: part };
-      }
-    }
-    return { i: blocs.length - 1, r: 1 };
-  }
-
+  /* ---------- Position sauvegardée -> position Y dans la page ---------- */
   function positionY(point) {
     var bloc = point && blocs[point.i];
     if (!bloc) return null;
@@ -244,6 +378,7 @@ animate();
     return r.top + window.pageYOffset + r.height * point.r;
   }
 
+  /* ---------- Affichage du ruban et du bouton "Reprendre" ---------- */
   function afficher() {
     var y = positionY(lire(CLE));
     if (y === null) {
@@ -257,15 +392,41 @@ animate();
     reprise.style.display = 'flex';
   }
 
+  /* ---------- Mode placement ---------- */
+  function modePlacement(actif) {
+    placement = actif;
+    contenu.classList.toggle('placement-actif', actif);
+    boutonPoser.textContent = actif ? '✕ Annuler' : TEXTE_PLACER;
+  }
+
   boutonPoser.addEventListener('click', function () {
-    if (ecrire(CLE, pointActuel())) {
+    modePlacement(!placement);
+  });
+
+  document.addEventListener('keydown', function (e) {
+    if (e.key === 'Escape' && placement) modePlacement(false);
+  });
+
+  /* Clic dans le texte : on enregistre le paragraphe + la hauteur du clic */
+  contenu.addEventListener('click', function (e) {
+    if (!placement) return;
+
+    var p = e.target.closest ? e.target.closest('p') : null;
+    var i = p ? blocs.indexOf(p) : -1;
+    if (i === -1) return;
+
+    var r = p.getBoundingClientRect();
+    var part = r.height ? Math.min(Math.max((e.clientY - r.top) / r.height, 0), 1) : 0;
+
+    if (ecrire(CLE, { i: i, r: part })) {
+      modePlacement(false);
       afficher();
-      annoncer('Marque-page posé ! ⭐');
     } else {
       annoncer("Impossible d'enregistrer ici (navigation privée ?)");
     }
   });
 
+  /* ---------- Reprendre / effacer ---------- */
   boutonReprendre.addEventListener('click', function () {
     var y = positionY(lire(CLE));
     if (y !== null) window.scrollTo({ top: Math.max(y - LIGNE, 0), behavior: 'smooth' });
@@ -274,11 +435,12 @@ animate();
   boutonEffacer.addEventListener('click', function () {
     effacer(CLE);
     afficher();
-    annoncer('Marque-page retiré ! ⭐');
   });
 
+  /* ---------- Recalcul si la mise en page change ---------- */
   window.addEventListener('load', afficher);
   window.addEventListener('resize', afficher);
   if (document.fonts && document.fonts.ready) document.fonts.ready.then(afficher);
   afficher();
+
 })();
