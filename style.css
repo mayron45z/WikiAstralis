@@ -1,12 +1,16 @@
 html {
-  background: #0a0513;          /* même couleur que ton body : plus de blanc derrière */
+  background: #0a0513;
   overflow-x: clip;
   overscroll-behavior: none;
+  -webkit-tap-highlight-color: rgba(0, 0, 0, 0) !important;
+  -webkit-touch-callout: none;
 }
 body {
   overflow-x: clip;
   max-width: 100%;
-  touch-action: pan-y;          /* seul le scroll vertical est autorisé au doigt */
+  touch-action: pan-y;          
+  -webkit-tap-highlight-color: rgba(0, 0, 0, 0) !important;
+  -webkit-touch-callout: none;
 }
 
 /* Fondu entrée accueil */
@@ -107,11 +111,7 @@ canvas#stars {
   font-size: 1.4rem;
   cursor: pointer;
   transition: color 0.3s, background 0.3s, box-shadow 0.3s;
-}
-.m-btn:hover {
-  color: #c29b52;
-  background: #c9a84c00;
-  box-shadow: 0 0 12px rgba(201, 168, 76, 0);
+  -webkit-tap-highlight-color: transparent;
 }
 
 /* Barre de volume dorée */
@@ -158,16 +158,18 @@ canvas#stars {
 
 
 @media (min-width: 769px) {
+  
   .musique-panneau {
     align-self: stretch;
     margin: auto 0 60px 50px;   
-    padding: 0 0 0 6px;        
+    padding: 0 0 0 6px;     
   }
 
   .musique-panneau .vinyle {
     width: 38px;
     height: 38px;
     transition: width 0.32s cubic-bezier(.4,0,.2,1), height 0.32s cubic-bezier(.4,0,.2,1);
+    -webkit-tap-highlight-color: transparent;
   }
 
   .musique-titre,
@@ -329,12 +331,12 @@ h3 {
 }
 
 .sidebar-icon {
-  font-size: 32px;
-  min-width: 32px;
+  font-size: 32px;   
+  min-width: 32px;  
   text-align: center;
   flex-shrink: 0;
 }
-/* Logo Dé */
+
 .sidebar-logo {
   display: flex;
   align-items: center;
@@ -1190,11 +1192,152 @@ h3 {
     font-size: 1.10rem;
     line-height: 1.8;
   }
-  .legende {
-    top: 8px;
-    right: 8px;
-    padding: 5px 8px;
-    font-size: 0.65rem;
-    line-height: 1.35;
+
+  /*Musiques*/
+  .musique-panneau {
+    position: fixed;
+    left: 12px;
+    bottom: 92px;
+    width: 56px;
+    padding: 8px;
+    border-radius: 28px;
+    background: rgba(10, 5, 25, 0.92);
+    border: 1px solid rgba(201, 168, 76, 0.5);
+    transition: width 0.32s cubic-bezier(.4,0,.2,1),
+                padding 0.32s, border-radius 0.32s;
+    z-index: 210;
   }
+  .musique-panneau .vinyle {
+    width: 38px;
+    height: 38px;
+    cursor: pointer;
+    transition: width 0.32s cubic-bezier(.4,0,.2,1),
+                height 0.32s cubic-bezier(.4,0,.2,1);
+  }
+  .musique-titre,
+  .musique-controles,
+  .musique-volume {
+    max-height: 0;
+    margin-top: 0;
+    opacity: 0;
+    overflow: hidden;
+    pointer-events: none;
+    transition: max-height 0.32s, margin-top 0.32s, opacity 0.2s;
+  }
+
+  /* Ouvert : au toucher */
+  .musique-panneau.ouvert {
+    width: 160px;
+    padding: 12px 10px;
+    border-radius: 16px;
+  }
+  .musique-panneau.ouvert .vinyle {
+    width: 80px;
+    height: 80px;
+  }
+  .musique-panneau.ouvert .musique-titre {
+    max-height: 60px;
+    margin-top: 10px;
+    opacity: 1;
+    pointer-events: auto;
+  }
+  .musique-panneau.ouvert .musique-controles {
+    max-height: 40px;
+    margin-top: 10px;
+    opacity: 1;
+    pointer-events: auto;
+  }
+  .musique-panneau.ouvert .musique-volume {
+    max-height: 14px;
+    margin-top: 10px;
+    opacity: 1;
+    pointer-events: auto;
+  }
+
+  /* Page chapitre */
+  .chapitre-wrapper {
+    margin: 10px 0 0;
+    padding: 0 12px 140px;
+    max-width: none;
+    width: 100%;
+    box-sizing: border-box;
+    min-height: 0;
+  }
+
+  .chapitre-header {
+    margin-bottom: 30px;
+  }
+  .chapitre-label {
+    font-size: 0.7rem;
+    letter-spacing: 0.2em;
+  }
+  .chapitre-title {
+    font-size: 1.6rem;
+    margin-bottom: 16px;
+  }
+
+  .chapitre-content {
+    padding: 22px 16px 1px 13px;
+    border-radius: 20px;
+    margin-bottom: 40px;
+  }
+
+  .chapitre-content p,
+  .dialogue-block p,
+  .dialogue-reve-block p,
+  .reve-block p,
+  .dialogue-conte-block p,
+  .conte-block p {
+    font-size: 1.1rem;
+    line-height: 1.8;
+    margin-bottom: 20px;
+  }
+  .dialogue-block,
+  .dialogue-reve-block {
+    padding-left: 12px;
+    margin: 22px 0;
+  }
+
+  .legende {
+    padding: 10px 16px;
+    font-size: 0.85rem;
+    line-height: 1.6;
+    position: static !important;
+    right: auto !important;
+    width: fit-content;
+    margin: 0 0 80px auto;
+    z-index: auto;
+  }
+
+  .legende-titre {
+    font-size: 1.35rem;
+  }
+  .pastille {
+    width: 14px;
+    height: 14px;
+    margin-right: 7px;
+  }
+
+
+  .marquepage-bar {
+    gap: 6px;
+  }
+  .chapitre-retour {
+    font-size: 0.7rem;
+    padding: 7px 14px;
+  }
+  .marquepage-btn,
+  .reprendre-marquepage-btn,
+  .delete-marquepage-btn {
+    font-size: 0.65rem;
+    padding: 7px 12px;
+  }
+  .marquepage-ruban {
+    left: -13px;
+    font-size: 1.1rem;
+  }
+  .sidebar-icon {
+    font-size: 22px;
+  }
+
 }

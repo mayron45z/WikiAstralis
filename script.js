@@ -4,17 +4,31 @@ const ctx = canvas.getContext('2d');
 
 let stars = [];
 let shootingStars = [];
-const STAR_COUNT = 350;
+const STAR_MAX = 350;
+function starCount() {
+  const n = Math.round((canvas.width * canvas.height) / 4500);
+  return Math.min(STAR_MAX, n);
+}
 
 function resize() {
   canvas.width = window.innerWidth;
   canvas.height = window.innerHeight;
 }
 
+let largeurPrecedente = window.innerWidth;
+window.addEventListener('resize', () => {
+  resize();
+  if (window.innerWidth !== largeurPrecedente) {
+    largeurPrecedente = window.innerWidth;
+    createStars();
+  }
+});
+
 // --- Étoiles normales ---
 function createStars() {
   stars = [];
-  for (let i = 0; i < STAR_COUNT; i++) {
+  const total = starCount();
+  for (let i = 0; i < total; i++) {
     stars.push({
       x: Math.random() * canvas.width,
       y: Math.random() * canvas.height,
@@ -153,7 +167,8 @@ animate();
     { titre: 'Lettre d\'Amour', fichier: 'jazzpiano.mp3' },
     { titre: 'Red Night', fichier: 'slow.mp3' },
     { titre: 'Nap in the Sun', fichier: 'harp.mp3' },
-    { titre: 'Beethoven', fichier: 'violin.mp3' }
+    { titre: 'La Chute', fichier: 'violin.mp3' },
+    { titre: 'My Ocean', fichier: 'guitar.mp3' }
   ];
 
   function lire(cle) {
@@ -217,6 +232,16 @@ animate();
   var bPlay = panneau.querySelector('.m-play');
   var bSuiv = panneau.querySelector('.m-suiv');
   var barreVolume = panneau.querySelector('.musique-volume');
+  
+  /* Mobile : toucher le vinyle ouvre/ferme le lecteur */
+  var mobile = window.matchMedia('(max-width: 768px)');
+  vinyle.addEventListener('click', function () {
+  if (mobile.matches) panneau.classList.toggle('ouvert');
+  });
+/* Toucher ailleurs le referme */
+document.addEventListener('click', function (e) {
+  if (!panneau.contains(e.target)) panneau.classList.remove('ouvert');
+});
 
   function majVolumeVisuel() {
     barreVolume.style.setProperty('--v', barreVolume.value + '%');
