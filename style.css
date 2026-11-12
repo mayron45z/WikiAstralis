@@ -1257,7 +1257,7 @@ h3 {
   /* Page chapitre */
   .chapitre-wrapper {
     margin: 10px 0 0;
-    padding: 0 12px 140px;
+    padding: 0 8px 140px;
     max-width: none;
     width: 100%;
     box-sizing: border-box;
@@ -1277,10 +1277,10 @@ h3 {
   }
 
   .chapitre-content {
-    padding: 22px 16px 1px 13px;
-    border-radius: 20px;
-    margin-bottom: 40px;
-  }
+  padding: 28px 22px 10px 20px;
+  border-radius: 20px;
+  margin-bottom: 40px;
+}
 
   .chapitre-content p,
   .dialogue-block p,
@@ -1288,15 +1288,15 @@ h3 {
   .reve-block p,
   .dialogue-conte-block p,
   .conte-block p {
-    font-size: 1.1rem;
-    line-height: 1.8;
-    margin-bottom: 20px;
-  }
-  .dialogue-block,
-  .dialogue-reve-block {
-    padding-left: 12px;
-    margin: 22px 0;
-  }
+  font-size: 1.1rem;
+  line-height: 1.95;
+  margin-bottom: 26px;
+}
+.dialogue-block,
+.dialogue-reve-block {
+  padding-left: 16px;
+  margin: 28px 0;
+}
 
   .legende {
     padding: 10px 16px;
